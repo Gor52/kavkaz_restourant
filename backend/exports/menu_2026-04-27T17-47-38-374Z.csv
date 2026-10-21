@@ -1,0 +1,2 @@
+id_dish,category_id,title,description,ingredients,price,weight,calories,allergens,photo_path,is_available,created_at
+1,1,Шашлык,Жаренное на огне мясо с душистыми специями.,"специи, мясо",2000.00,360,2000,нет,https://plovnaya1.com/thumb/2/3KEp451S5XDckHnbrmiNpw/r/d/shashlyk_iz_myakoti_yagnenka.jpg,true,"Sat Apr 25 2026 12:31:36 GMT+0300 (Москва, стандартное время)"

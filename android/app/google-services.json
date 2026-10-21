@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "122186390082",
+    "project_id": "restourant-eb3e1",
+    "storage_bucket": "restourant-eb3e1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122186390082:android:4baa6e857fa8d95565ebdb",
+        "android_client_info": {
+          "package_name": "com.example.kavkaz_restourant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbSIhUwrwDRzem4x96iwmdQjjjiVOa-jc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

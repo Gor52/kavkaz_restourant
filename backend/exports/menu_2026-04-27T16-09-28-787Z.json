@@ -1,0 +1,16 @@
+[
+  {
+    "id_dish": 1,
+    "category_id": 1,
+    "title": "Шашлык",
+    "description": "Жаренное на огне мясо с душистыми специями.",
+    "ingredients": "специи, мясо",
+    "price": "2000.00",
+    "weight": 360,
+    "calories": 2000,
+    "allergens": "нет",
+    "photo_path": "https://plovnaya1.com/thumb/2/3KEp451S5XDckHnbrmiNpw/r/d/shashlyk_iz_myakoti_yagnenka.jpg",
+    "is_available": true,
+    "created_at": "2026-04-25T09:31:36.720Z"
+  }
+]

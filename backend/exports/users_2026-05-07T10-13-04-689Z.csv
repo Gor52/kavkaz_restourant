@@ -1,0 +1,7 @@
+id_user,role_id,full_name,phone,email,password_hash,is_blocked,registered_at
+14,1,Варданян Эрик,+79997777777,erivard@gmail.com,$2b$12$LHoySd.sjeU4CBpOoQCXmODi8LlxyY7g3csUCr1hR6oTWdxDqtHNC,false,"Sun Apr 26 2026 22:44:29 GMT+0300 (Москва, стандартное время)"
+13,1,Босс Боссович Босовян,89852144752,bigboss@gmail.com,$2b$12$blThJ1XjhozCYG3pEjcTXuGsenAtbuun.Fy6hPzG4wcUJizbrYyBa,false,"Sat Apr 25 2026 14:52:25 GMT+0300 (Москва, стандартное время)"
+12,1,Варданян Гор,+79165666126,giperpanda@gmail.com,$2b$12$BaM2lo.YdHya0IsnrVBa6.yLnWNssNLhrpZ99fhXCR7d3ncJvpSw2,false,"Sat Apr 25 2026 12:38:34 GMT+0300 (Москва, стандартное время)"
+10,3,Администратор Системы,+79990000001,admin@local.test,$2b$12$n9WwuVHtYKpeX/a.uCVjouOmSxH1s/9Dp3Rs4kWnJpc4AqLpxMwmq,false,"Fri Apr 24 2026 23:46:59 GMT+0300 (Москва, стандартное время)"
+11,2,Менеджер Системы,+79990000002,manager@local.test,$2b$12$JwA/najoBOZ1nUWjBtObiOF1MOL9DUG9Kt4wPXxMnh4TX1k6TWF2q,false,"Fri Apr 24 2026 23:46:59 GMT+0300 (Москва, стандартное время)"
+9,1,Ivanov Ivan Ivanovich,89999999999,ivan@gmail.com,$2b$12$aMVmB9vd1PVLZuncwWYafOVOXWFriWEZyu6Ost7IMyhTs3MG6VQDm,false,"Fri Apr 24 2026 23:29:52 GMT+0300 (Москва, стандартное время)"

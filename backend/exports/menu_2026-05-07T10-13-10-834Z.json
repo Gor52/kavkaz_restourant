@@ -1,0 +1,97 @@
+{
+  "categories": [
+    {
+      "id_category": 2,
+      "title": "Горячее",
+      "sort_order": 1
+    },
+    {
+      "id_category": 3,
+      "title": "Супы",
+      "sort_order": 2
+    },
+    {
+      "id_category": 6,
+      "title": "Салаты",
+      "sort_order": 3
+    },
+    {
+      "id_category": 5,
+      "title": "Соусы",
+      "sort_order": 4
+    },
+    {
+      "id_category": 7,
+      "title": "Напитки",
+      "sort_order": 5
+    },
+    {
+      "id_category": 4,
+      "title": "Десерты",
+      "sort_order": 6
+    },
+    {
+      "id_category": 8,
+      "title": "Выпечка",
+      "sort_order": 6
+    }
+  ],
+  "dishes": [
+    {
+      "id_dish": 8,
+      "category_id": 7,
+      "title": "Тан",
+      "description": "Холодный кисломолочный напиток.",
+      "ingredients": "Вода, соль, закваска.",
+      "price": "150.00",
+      "weight": 250,
+      "calories": 50,
+      "allergens": "Аллергены присутствуют",
+      "photo_path": "http://127.0.0.1:3001/uploads/dishes/dish_1777895608372_562491202.jpg",
+      "is_available": true,
+      "created_at": "2026-05-04T11:53:32.867Z"
+    },
+    {
+      "id_dish": 7,
+      "category_id": 5,
+      "title": "Аджика",
+      "description": "Домашний соус с остринкой.",
+      "ingredients": "Красный перец, чеснок, кориандр, соль, прямые травы",
+      "price": "100.00",
+      "weight": 50,
+      "calories": 60,
+      "allergens": "Все продукты являются аллергенами",
+      "photo_path": "http://127.0.0.1:3001/uploads/dishes/dish_1777895208923_720362827.jpg",
+      "is_available": true,
+      "created_at": "2026-05-04T11:46:56.664Z"
+    },
+    {
+      "id_dish": 6,
+      "category_id": 8,
+      "title": "Осетинский пирог",
+      "description": "Вкуснейший осетинский пирог,",
+      "ingredients": "Сыр чанах, картофель, тесто на дрожжах",
+      "price": "500.00",
+      "weight": 500,
+      "calories": 250,
+      "allergens": "Глютен, молоко, яйца",
+      "photo_path": "http://127.0.0.1:3001/uploads/dishes/dish_1777894886731_24196380.jpg",
+      "is_available": true,
+      "created_at": "2026-05-04T11:41:30.072Z"
+    },
+    {
+      "id_dish": 5,
+      "category_id": 2,
+      "title": "Шашлык",
+      "description": "Жаренное на огне мясо с душистыми специями.",
+      "ingredients": "специи, мясо",
+      "price": "350.00",
+      "weight": 360,
+      "calories": 450,
+      "allergens": "нет",
+      "photo_path": "https://plovnaya1.com/thumb/2/3KEp451S5XDckHnbrmiNpw/r/d/shashlyk_iz_myakoti_yagnenka.jpg",
+      "is_available": true,
+      "created_at": "2026-04-27T19:41:28.948Z"
+    }
+  ]
+}

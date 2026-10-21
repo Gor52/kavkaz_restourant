@@ -1,0 +1,1436 @@
+openapi: 3.0.3
+info:
+  title: Kavkaz Restaurant API
+  description: "OpenAPI спецификация для Flutter-клиента kavkaz_restourant"
+  version: 1.0.0
+servers:
+  - url: http://10.249.121.205:3001
+    description: Основной API-сервер
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id_user:
+          type: integer
+        role_id:
+          type: integer
+        full_name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          nullable: true
+        is_blocked:
+          type: boolean
+        registered_at:
+          type: string
+          format: date-time
+      required:
+        - id_user
+        - role_id
+        - full_name
+        - phone
+        - is_blocked
+    LoginRequest:
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+      required:
+        - login
+        - password
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      required:
+        - access_token
+        - user
+    RegisterRequest:
+      type: object
+      properties:
+        full_name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - full_name
+        - phone
+        - email
+        - password
+    ForgotPasswordRequest:
+      type: object
+      description: Поле login — email аккаунта (для совместимости с клиентами)
+      properties:
+        login:
+          type: string
+          format: email
+      required:
+        - login
+    ResetPasswordRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 8
+          maxLength: 20
+          description: Одноразовый токен из письма (до 20 символов, как в verification_codes)
+        password:
+          type: string
+      required:
+        - code
+        - password
+    Category:
+      type: object
+      properties:
+        id_category:
+          type: integer
+        title:
+          type: string
+        sort_order:
+          type: integer
+      required:
+        - id_category
+        - title
+        - sort_order
+    Dish:
+      type: object
+      properties:
+        id_dish:
+          type: integer
+        category_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        ingredients:
+          type: string
+        price:
+          type: number
+          format: double
+        weight:
+          type: integer
+        calories:
+          type: integer
+          nullable: true
+        allergens:
+          type: string
+          nullable: true
+        photo_path:
+          type: string
+          nullable: true
+        is_available:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - id_dish
+        - category_id
+        - title
+        - description
+        - ingredients
+        - price
+        - weight
+        - is_available
+    CartItem:
+      type: object
+      properties:
+        id_cart_item:
+          type: integer
+        cart_id:
+          type: integer
+        dish_id:
+          type: integer
+        quantity:
+          type: integer
+        comment:
+          type: string
+          nullable: true
+        selected_options:
+          type: string
+          nullable: true
+        dish:
+          $ref: '#/components/schemas/Dish'
+      required:
+        - id_cart_item
+        - cart_id
+        - dish_id
+        - quantity
+    Booking:
+      type: object
+      properties:
+        id_booking:
+          type: integer
+        user_id:
+          type: integer
+        booking_date:
+          type: string
+          format: date
+        booking_time:
+          type: string
+        guest_count:
+          type: integer
+        comment:
+          type: string
+          nullable: true
+        booking_status_id:
+          type: integer
+        booking_status_title:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - id_booking
+        - user_id
+        - booking_date
+        - booking_time
+        - guest_count
+        - booking_status_id
+    OrderItem:
+      type: object
+      properties:
+        id_order_item:
+          type: integer
+        order_id:
+          type: integer
+        dish_id:
+          type: integer
+          nullable: true
+        quantity:
+          type: integer
+        price_at_order_time:
+          type: number
+          format: double
+        item_total:
+          type: number
+          format: double
+        selected_options:
+          type: string
+          nullable: true
+        dish_title:
+          type: string
+          nullable: true
+        dish_photo:
+          type: string
+          nullable: true
+      required:
+        - id_order_item
+        - order_id
+        - quantity
+        - price_at_order_time
+        - item_total
+    Order:
+      type: object
+      properties:
+        id_order:
+          type: integer
+        user_id:
+          type: integer
+        address_id:
+          type: integer
+          nullable: true
+        order_status_id:
+          type: integer
+        pickup_type_id:
+          type: integer
+        payment_method_id:
+          type: integer
+        receive_time:
+          type: string
+          format: date-time
+        comment:
+          type: string
+          nullable: true
+        total_amount:
+          type: number
+          format: double
+        spent_bonus:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        order_status_title:
+          type: string
+          nullable: true
+        pickup_type_title:
+          type: string
+          nullable: true
+        payment_method_title:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+      required:
+        - id_order
+        - user_id
+        - order_status_id
+        - pickup_type_id
+        - payment_method_id
+        - receive_time
+        - total_amount
+        - spent_bonus
+    Review:
+      type: object
+      properties:
+        id_review:
+          type: integer
+        user_id:
+          type: integer
+        dish_id:
+          type: integer
+        rating:
+          type: integer
+        review_text:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        user_name:
+          type: string
+          nullable: true
+      required:
+        - id_review
+        - user_id
+        - dish_id
+        - rating
+        - review_text
+    Notification:
+      type: object
+      properties:
+        id_notification:
+          type: integer
+        user_id:
+          type: integer
+        title:
+          type: string
+        text:
+          type: string
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - id_notification
+        - user_id
+        - title
+        - text
+        - is_read
+    Address:
+      type: object
+      properties:
+        id_address:
+          type: integer
+        user_id:
+          type: integer
+        address_text:
+          type: string
+        comment:
+          type: string
+          nullable: true
+        is_default:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - id_address
+        - user_id
+        - address_text
+        - is_default
+    BonusOperation:
+      type: object
+      properties:
+        id_bonus_operation:
+          type: integer
+        user_id:
+          type: integer
+        bonus_operation_type_id:
+          type: integer
+        bonus_amount:
+          type: integer
+        order_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+        operation_title:
+          type: string
+          nullable: true
+      required:
+        - id_bonus_operation
+        - user_id
+        - bonus_operation_type_id
+        - bonus_amount
+paths:
+  /auth/login:
+    post:
+      summary: Вход пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+  /auth/register:
+    post:
+      summary: Регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /auth/forgot-password:
+    post:
+      summary: Отправка кода восстановления
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+      responses:
+        '200':
+          description: Письмо с кодом отправлено на email аккаунта
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  email_hint:
+                    type: string
+                    description: Маска email (например ab***@mail.com)
+        '400':
+          description: Нет email у аккаунта
+        '404':
+          description: Пользователь не найден
+        '502':
+          description: Ошибка SMTP
+        '503':
+          description: Почта не настроена на сервере
+  /auth/reset-password:
+    post:
+      summary: Сброс пароля
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '200':
+          description: Пароль сброшен
+  /menu/categories:
+    get:
+      summary: Список категорий меню
+      responses:
+        '200':
+          description: Категории получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+  /menu/dishes:
+    get:
+      summary: Список блюд
+      parameters:
+        - name: category_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: available
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Блюда получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
+  /menu/dishes/{dishId}:
+    get:
+      summary: Детали блюда
+      parameters:
+        - name: dishId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Детали блюда
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+  /cart/items:
+    get:
+      summary: Содержимое корзины
+      responses:
+        '200':
+          description: Корзина получена
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartItem'
+    post:
+      summary: Добавить товар в корзину
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dish_id:
+                  type: integer
+                quantity:
+                  type: integer
+                comment:
+                  type: string
+                  nullable: true
+                selected_options:
+                  type: string
+                  nullable: true
+              required:
+                - dish_id
+                - quantity
+      responses:
+        '201':
+          description: Товар добавлен
+  /cart/items/{cartItemId}:
+    put:
+      summary: Обновить позицию корзины
+      parameters:
+        - name: cartItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                comment:
+                  type: string
+                  nullable: true
+                selected_options:
+                  type: string
+                  nullable: true
+              required:
+                - quantity
+      responses:
+        '200':
+          description: Позиция обновлена
+    delete:
+      summary: Удалить позицию корзины
+      parameters:
+        - name: cartItemId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Позиция удалена
+  /cart:
+    delete:
+      summary: Очистить корзину
+      responses:
+        '204':
+          description: Корзина очищена
+  /bookings:
+    get:
+      summary: Список броней
+      responses:
+        '200':
+          description: Бронирования получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+    post:
+      summary: Создать бронь
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                booking_date:
+                  type: string
+                  format: date
+                booking_time:
+                  type: string
+                guest_count:
+                  type: integer
+                comment:
+                  type: string
+                  nullable: true
+              required:
+                - booking_date
+                - booking_time
+                - guest_count
+      responses:
+        '201':
+          description: Бронирование создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+  /bookings/{bookingId}:
+    put:
+      summary: Обновить бронь
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                booking_date:
+                  type: string
+                  format: date
+                booking_time:
+                  type: string
+                guest_count:
+                  type: integer
+                comment:
+                  type: string
+                  nullable: true
+              required:
+                - booking_date
+                - booking_time
+                - guest_count
+      responses:
+        '200':
+          description: Бронирование обновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+    delete:
+      summary: Отменить бронь
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Бронирование отменено
+  /orders:
+    get:
+      summary: Список заказов
+      responses:
+        '200':
+          description: Заказы получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      summary: Создать заказ
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pickup_type_id:
+                  type: integer
+                payment_method_id:
+                  type: integer
+                address_id:
+                  type: integer
+                  nullable: true
+                receive_time:
+                  type: string
+                  format: date-time
+                comment:
+                  type: string
+                  nullable: true
+                spent_bonus:
+                  type: integer
+              required:
+                - pickup_type_id
+                - payment_method_id
+                - receive_time
+      responses:
+        '201':
+          description: Заказ создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /orders/{orderId}:
+    get:
+      summary: Детали заказа
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Заказ получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+  /orders/{orderId}/cancel:
+    put:
+      summary: Отменить заказ
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Заказ отменён
+  /orders/{orderId}/repeat:
+    post:
+      summary: Повторить заказ
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Заказ повторён
+  /profile:
+    get:
+      summary: Получить профиль
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Профиль получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Обновить профиль
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                  nullable: true
+              required:
+                - full_name
+                - phone
+      responses:
+        '200':
+          description: Профиль обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: Удалить аккаунт
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Аккаунт удалён
+  /profile/password:
+    put:
+      summary: Изменить пароль
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                new_password:
+                  type: string
+              required:
+                - current_password
+                - new_password
+      responses:
+        '200':
+          description: Пароль изменён
+  /profile/addresses:
+    get:
+      summary: Список адресов
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Адреса получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+    post:
+      summary: Добавить адрес
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address_text:
+                  type: string
+                comment:
+                  type: string
+                  nullable: true
+                is_default:
+                  type: boolean
+              required:
+                - address_text
+      responses:
+        '201':
+          description: Адрес добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+  /profile/addresses/{addressId}:
+    put:
+      summary: Обновить адрес
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: addressId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address_text:
+                  type: string
+                comment:
+                  type: string
+                  nullable: true
+                is_default:
+                  type: boolean
+              required:
+                - address_text
+      responses:
+        '200':
+          description: Адрес обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+    delete:
+      summary: Удалить адрес
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: addressId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Адрес удалён
+  /profile/bonus-history:
+    get:
+      summary: История бонусов
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: История бонусов получена
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BonusOperation'
+  /reviews:
+    get:
+      summary: Список отзывов блюда
+      parameters:
+        - name: dish_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Отзывы получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+    post:
+      summary: Добавить отзыв
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dish_id:
+                  type: integer
+                rating:
+                  type: integer
+                review_text:
+                  type: string
+              required:
+                - dish_id
+                - rating
+                - review_text
+      responses:
+        '201':
+          description: Отзыв добавлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+  /reviews/{reviewId}:
+    put:
+      summary: Обновить отзыв
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                review_text:
+                  type: string
+              required:
+                - rating
+                - review_text
+      responses:
+        '200':
+          description: Отзыв обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+    delete:
+      summary: Удалить отзыв
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Отзыв удалён
+  /notifications:
+    get:
+      summary: Список уведомлений
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Уведомления получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+  /notifications/{notificationId}/read:
+    put:
+      summary: Пометить уведомление прочитанным
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Уведомление прочитано
+  /notifications/read-all:
+    put:
+      summary: Пометить все уведомления прочитанными
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Все уведомления прочитаны
+  /admin/categories:
+    get:
+      summary: Список категорий администратора
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Категории получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    post:
+      summary: Создать категорию администратора
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                sort_order:
+                  type: integer
+              required:
+                - title
+                - sort_order
+      responses:
+        '201':
+          description: Категория создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+  /admin/categories/{categoryId}:
+    put:
+      summary: Обновить категорию администратора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                sort_order:
+                  type: integer
+              required:
+                - title
+                - sort_order
+      responses:
+        '200':
+          description: Категория обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    delete:
+      summary: Удалить категорию администратора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Категория удалена
+  /admin/dishes:
+    get:
+      summary: Список блюд администратора
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Блюда получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dish'
+    post:
+      summary: Создать блюдо администратора
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dish'
+      responses:
+        '201':
+          description: Блюдо создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+  /admin/dishes/{dishId}:
+    put:
+      summary: Обновить блюдо администратора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dishId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dish'
+      responses:
+        '200':
+          description: Блюдо обновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dish'
+    delete:
+      summary: Удалить блюдо администратора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dishId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Блюдо удалено
+  /admin/dishes/{dishId}/availability:
+    put:
+      summary: Изменить доступность блюда
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dishId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_available:
+                  type: boolean
+              required:
+                - is_available
+      responses:
+        '200':
+          description: Доступность обновлена
+  /admin/orders:
+    get:
+      summary: Список заказов администратора
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Заказы получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /admin/orders/{orderId}/status:
+    put:
+      summary: Обновить статус заказа администратора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_status_id:
+                  type: integer
+              required:
+                - order_status_id
+      responses:
+        '200':
+          description: Статус заказа обновлён
+  /admin/bookings:
+    get:
+      summary: Список броней администратора
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Бронирования получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+  /admin/bookings/{bookingId}/status:
+    put:
+      summary: Обновить статус бронирования администратора
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                booking_status_id:
+                  type: integer
+              required:
+                - booking_status_id
+      responses:
+        '200':
+          description: Статус бронирования обновлён
+  /admin/users:
+    get:
+      summary: Список пользователей администратора
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Пользователи получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /admin/users/{userId}/role:
+    put:
+      summary: Изменить роль пользователя
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role_id:
+                  type: integer
+              required:
+                - role_id
+      responses:
+        '200':
+          description: Роль изменена
+  /admin/users/{userId}/block:
+    put:
+      summary: Заблокировать пользователя
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_blocked:
+                  type: boolean
+      responses:
+        '200':
+          description: Статус блокировки изменен
+  /admin/imports:
+    post:
+      summary: Импорт данных администратора
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Сложная структура импорта; использовать в соответствии с backend
+      responses:
+        '201':
+          description: Импорт создан
+  /admin/exports:
+    post:
+      summary: Экспорт данных администратора
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Сложная структура экспорта; использовать в соответствии с backend
+      responses:
+        '201':
+          description: Экспорт создан
+security:
+  - bearerAuth: []

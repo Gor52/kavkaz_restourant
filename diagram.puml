@@ -1,0 +1,2248 @@
+@startuml
+set namespaceSeparator ::
+
+class "kavkaz_restourant::app::app.dart::CaucasianRestaurantApp" {
+  {static} -TextTheme _textTheme()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::app::app.dart::CaucasianRestaurantApp"
+
+class "kavkaz_restourant::app::di.dart::AppDi" {
+  {static} -String _configuredBaseUrl
+  {static} -bool _androidApiEmulator
+  {static} -bool _androidApiUsb
+  {static} +LocalStorageService localStorageService
+  {static} +SessionService sessionService
+  {static} +ApiService apiService
+  {static} +ApiAuthRepository authRepository
+  {static} +ApiMenuRepository menuRepository
+  {static} +ApiCartRepository cartRepository
+  {static} +ApiOrderRepository orderRepository
+  {static} +ApiBookingRepository bookingRepository
+  {static} +ApiProfileRepository profileRepository
+  {static} +ApiReviewRepository reviewRepository
+  {static} +ApiNotificationRepository notificationRepository
+  {static} +ApiAdminRepository adminRepository
+  {static} +ApiSupportRepository supportRepository
+  {static} -String _resolveBaseUrl()
+}
+
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::core::services::local_storage_service.dart::LocalStorageService"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::core::services::session_service.dart::SessionService"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_auth_repository.dart::ApiAuthRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_menu_repository.dart::ApiMenuRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_cart_repository.dart::ApiCartRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_order_repository.dart::ApiOrderRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_booking_repository.dart::ApiBookingRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_profile_repository.dart::ApiProfileRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_review_repository.dart::ApiReviewRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_notification_repository.dart::ApiNotificationRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_admin_repository.dart::ApiAdminRepository"
+"kavkaz_restourant::app::di.dart::AppDi" o-- "kavkaz_restourant::data::repositories::api_support_repository.dart::ApiSupportRepository"
+
+abstract class "kavkaz_restourant::app::theme::app_colors.dart::AppColors" {
+  {static} +Color primary
+  {static} +Color primaryDark
+  {static} +Color primaryLight
+  {static} +Color accent
+  {static} +Color accentSoft
+  {static} +Color background
+  {static} +Color backgroundTop
+  {static} +Color backgroundDeep
+  {static} +Color surface
+  {static} +Color card
+  {static} +Color inputFill
+  {static} +Color textPrimary
+  {static} +Color textSecondary
+  {static} +Color textHint
+  {static} +Color success
+  {static} +Color warning
+  {static} +Color error
+  {static} +Color border
+  {static} +Color borderLight
+  {static} +Color shadow
+  {static} +Color cardShadow
+  {static} +Color disabled
+  {static} +Color icon
+}
+
+"kavkaz_restourant::app::theme::app_colors.dart::AppColors" o-- "dart::ui::Color"
+
+abstract class "kavkaz_restourant::app::theme::app_text_styles.dart::AppTextStyles" {
+  {static} +TextStyle displayLarge()
+  {static} +TextStyle headlineMedium()
+  {static} +TextStyle titleLarge()
+  {static} +TextStyle titleMedium()
+  {static} +TextStyle bodyLarge()
+  {static} +TextStyle bodyMedium()
+  {static} +TextStyle labelLarge()
+}
+
+abstract class "kavkaz_restourant::app::theme::app_theme.dart::AppTheme" {
+  {static} +ThemeData lightTheme()
+}
+
+abstract class "kavkaz_restourant::core::constants::role_constants.dart::RoleConstants" {
+  {static} +String user
+  {static} +String manager
+  {static} +String admin
+}
+
+abstract class "kavkaz_restourant::core::constants::storage_keys.dart::StorageKeys" {
+  {static} +String accessToken
+  {static} +String refreshToken
+  {static} +String userId
+  {static} +String role
+  {static} +String isFirstLaunch
+  {static} +String rememberMe
+  {static} +String rememberedLogin
+}
+
+class "kavkaz_restourant::core::services::in_app_notification_sync_service.dart::InAppNotificationSyncService" {
+  {static} +InAppNotificationSyncService instance
+  -Timer? _timer
+  -bool _started
+  -Set<int> _knownNotificationIds
+  +dynamic start()
+  +dynamic stop()
+  -dynamic _sync()
+  -dynamic _showNotification()
+}
+
+"kavkaz_restourant::core::services::in_app_notification_sync_service.dart::InAppNotificationSyncService" o-- "kavkaz_restourant::core::services::in_app_notification_sync_service.dart::InAppNotificationSyncService"
+"kavkaz_restourant::core::services::in_app_notification_sync_service.dart::InAppNotificationSyncService" o-- "dart::async::Timer"
+
+class "kavkaz_restourant::core::services::local_notification_service.dart::LocalNotificationService" {
+  {static} +LocalNotificationService instance
+  {static} +String channelId
+  {static} +String channelName
+  -FlutterLocalNotificationsPlugin _plugin
+  -bool _initialized
+  -NotificationDetails _details
+  +dynamic initialize()
+  +dynamic showNow()
+}
+
+"kavkaz_restourant::core::services::local_notification_service.dart::LocalNotificationService" o-- "kavkaz_restourant::core::services::local_notification_service.dart::LocalNotificationService"
+"kavkaz_restourant::core::services::local_notification_service.dart::LocalNotificationService" o-- "flutter_local_notifications::src::flutter_local_notifications_plugin.dart::FlutterLocalNotificationsPlugin"
+"kavkaz_restourant::core::services::local_notification_service.dart::LocalNotificationService" o-- "flutter_local_notifications::src::notification_details.dart::NotificationDetails"
+
+class "kavkaz_restourant::core::services::local_storage_service.dart::LocalStorageService" {
+  +dynamic setString()
+  +dynamic setInt()
+  +dynamic setBool()
+  +dynamic getString()
+  +dynamic getInt()
+  +dynamic getBool()
+  +dynamic remove()
+  +dynamic clear()
+}
+
+abstract class "kavkaz_restourant::core::services::reverse_geocode_service.dart::ReverseGeocodeService" {
+  {static} -Dio _dio
+  {static} +dynamic reverse()
+}
+
+"kavkaz_restourant::core::services::reverse_geocode_service.dart::ReverseGeocodeService" o-- "dio::src::dio.dart::Dio"
+
+class "kavkaz_restourant::core::services::session_service.dart::SessionService" {
+  -LocalStorageService _storage
+  -String? _accessTokenCache
+  -int? _userIdCache
+  -String? _roleCache
+  +dynamic saveSession()
+  +dynamic setRememberMe()
+  +dynamic getRememberMe()
+  +dynamic setRememberedLogin()
+  +dynamic getRememberedLogin()
+  +dynamic getAccessToken()
+  +dynamic getUserId()
+  +dynamic getRole()
+  +dynamic isAuthorized()
+  +dynamic clearSession()
+}
+
+"kavkaz_restourant::core::services::session_service.dart::SessionService" o-- "kavkaz_restourant::core::services::local_storage_service.dart::LocalStorageService"
+
+abstract class "kavkaz_restourant::core::utils::validators.dart::Validators" {
+  {static} +String? validateRequired()
+  {static} +String? validateName()
+  {static} +String? validatePhone()
+  {static} +String? validateEmail()
+  {static} +String? validateRequiredEmail()
+  {static} +String? validatePassword()
+  {static} +String? validatePasswordWithStrength()
+  {static} +String? validateAddressComment()
+  {static} +String? validateLogin()
+  {static} +String? validateRecoveryCode()
+  {static} +String? validateCategoryTitle()
+  {static} +String? validateDishTitle()
+  {static} +String? validateDishText()
+  {static} +String? validatePositiveInt()
+  {static} +String? validateOptionalPositiveInt()
+  {static} +String? validatePositiveDecimal()
+  {static} +String? validateOptionalUrl()
+  {static} +String? validateOptionalText()
+  {static} +String? validateAddress()
+  {static} +String? validateComment()
+  {static} +String? validateReview()
+}
+
+class "kavkaz_restourant::core::widgets::address_card.dart::AddressCard" {
+  +AddressModel address
+  +void Function()? onEdit
+  +void Function()? onDelete
+  +void Function()? onSelect
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::address_card.dart::AddressCard" o-- "kavkaz_restourant::data::models::address_model.dart::AddressModel"
+"kavkaz_restourant::core::widgets::address_card.dart::AddressCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::address_card.dart::AddressCard"
+
+class "kavkaz_restourant::core::widgets::admin_stat_card.dart::AdminStatCard" {
+  +String title
+  +String value
+  +IconData icon
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::admin_stat_card.dart::AdminStatCard" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::admin_stat_card.dart::AdminStatCard"
+
+class "kavkaz_restourant::core::widgets::app_bottom_nav_bar.dart::_NavItemSpec" {
+  +IconData outline
+  +IconData selected
+  +String label
+}
+
+"kavkaz_restourant::core::widgets::app_bottom_nav_bar.dart::_NavItemSpec" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "kavkaz_restourant::core::widgets::app_bottom_nav_bar.dart::AppBottomNavBar" {
+  +int currentIndex
+  +void Function(int) onTap
+  +bool showAdminTab
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::app_bottom_nav_bar.dart::AppBottomNavBar" o-- "flutter::src::foundation::basic_types.dart::void Function(int)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::app_bottom_nav_bar.dart::AppBottomNavBar"
+
+class "kavkaz_restourant::core::widgets::app_scaffold.dart::AppScaffold" {
+  +PreferredSizeWidget? appBar
+  +Widget body
+  +Widget? bottomNavigationBar
+  +Widget? floatingActionButton
+  +bool safeArea
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::app_scaffold.dart::AppScaffold" o-- "flutter::src::widgets::preferred_size.dart::PreferredSizeWidget"
+"kavkaz_restourant::core::widgets::app_scaffold.dart::AppScaffold" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::app_scaffold.dart::AppScaffold"
+
+class "kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" {
+  +TextEditingController controller
+  +String hintText
+  +String? labelText
+  +Widget? prefixIcon
+  +Widget? suffixIcon
+  +bool obscureText
+  +TextInputType keyboardType
+  +String? Function(String?)? validator
+  +int? maxLength
+  +int maxLines
+  +bool readOnly
+  +void Function()? onTap
+  +void Function(String)? onChanged
+  +List<TextInputFormatter>? inputFormatters
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" o-- "flutter::src::widgets::framework.dart::Widget"
+"kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" o-- "flutter::src::services::text_input.dart::TextInputType"
+"kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" o-- "null::String Function(String)"
+"kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" o-- "dart::ui::void Function()"
+"kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField" o-- "flutter::src::foundation::basic_types.dart::void Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::app_text_field.dart::AppTextField"
+
+class "kavkaz_restourant::core::widgets::booking_card.dart::BookingCard" {
+  +BookingModel booking
+  +void Function()? onTap
+  +void Function()? onEdit
+  +void Function()? onCancel
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::booking_card.dart::BookingCard" o-- "kavkaz_restourant::data::models::booking_model.dart::BookingModel"
+"kavkaz_restourant::core::widgets::booking_card.dart::BookingCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::booking_card.dart::BookingCard"
+
+class "kavkaz_restourant::core::widgets::category_chip.dart::CategoryChip" {
+  +String title
+  +bool isSelected
+  +void Function()? onTap
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::category_chip.dart::CategoryChip" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::category_chip.dart::CategoryChip"
+
+class "kavkaz_restourant::core::widgets::dish_card.dart::DishCard" {
+  +DishModel dish
+  +void Function()? onTap
+  +void Function()? onAddToCart
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::dish_card.dart::DishCard" o-- "kavkaz_restourant::data::models::dish_model.dart::DishModel"
+"kavkaz_restourant::core::widgets::dish_card.dart::DishCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::dish_card.dart::DishCard"
+
+class "kavkaz_restourant::core::widgets::dish_thumbnail.dart::DishThumbnail" {
+  +String? photoPath
+  +double size
+  +BorderRadius? borderRadius
+  {static} -String _placeholderAsset
+  +Widget build()
+  -Widget _placeholder()
+  -Widget _buildImage()
+}
+
+"kavkaz_restourant::core::widgets::dish_thumbnail.dart::DishThumbnail" o-- "flutter::src::painting::border_radius.dart::BorderRadius"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::dish_thumbnail.dart::DishThumbnail"
+
+class "kavkaz_restourant::core::widgets::empty_state.dart::EmptyState" {
+  +IconData icon
+  +String title
+  +String subtitle
+  +Widget? action
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::empty_state.dart::EmptyState" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"kavkaz_restourant::core::widgets::empty_state.dart::EmptyState" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::empty_state.dart::EmptyState"
+
+class "kavkaz_restourant::core::widgets::error_state.dart::ErrorState" {
+  +String title
+  +String subtitle
+  +void Function()? onRetry
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::error_state.dart::ErrorState" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::error_state.dart::ErrorState"
+
+class "kavkaz_restourant::core::widgets::loading_view.dart::LoadingView" {
+  +String? message
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::loading_view.dart::LoadingView"
+
+class "kavkaz_restourant::core::widgets::notification_tile.dart::NotificationTile" {
+  +NotificationModel notification
+  +void Function()? onTap
+  +Widget build()
+  -String _formatDate()
+}
+
+"kavkaz_restourant::core::widgets::notification_tile.dart::NotificationTile" o-- "kavkaz_restourant::data::models::notification_model.dart::NotificationModel"
+"kavkaz_restourant::core::widgets::notification_tile.dart::NotificationTile" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::notification_tile.dart::NotificationTile"
+
+class "kavkaz_restourant::core::widgets::order_card.dart::OrderCard" {
+  +OrderModel order
+  +void Function()? onTap
+  +void Function()? onRepeat
+  +void Function()? onCancel
+  +void Function()? onEdit
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::order_card.dart::OrderCard" o-- "kavkaz_restourant::data::models::order_model.dart::OrderModel"
+"kavkaz_restourant::core::widgets::order_card.dart::OrderCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::order_card.dart::OrderCard"
+
+class "kavkaz_restourant::core::widgets::price_row.dart::PriceRow" {
+  +String label
+  +String value
+  +bool isTotal
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::price_row.dart::PriceRow"
+
+class "kavkaz_restourant::core::widgets::primary_button.dart::PrimaryButton" {
+  +String text
+  +void Function()? onPressed
+  +bool isLoading
+  +IconData? icon
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::primary_button.dart::PrimaryButton" o-- "dart::ui::void Function()"
+"kavkaz_restourant::core::widgets::primary_button.dart::PrimaryButton" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::primary_button.dart::PrimaryButton"
+
+class "kavkaz_restourant::core::widgets::profile_list_tile.dart::ProfileListTile" {
+  +IconData icon
+  +String title
+  +String? subtitle
+  +void Function()? onTap
+  +Color? iconColor
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::profile_list_tile.dart::ProfileListTile" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"kavkaz_restourant::core::widgets::profile_list_tile.dart::ProfileListTile" o-- "dart::ui::void Function()"
+"kavkaz_restourant::core::widgets::profile_list_tile.dart::ProfileListTile" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::profile_list_tile.dart::ProfileListTile"
+
+class "kavkaz_restourant::core::widgets::quantity_selector.dart::QuantitySelector" {
+  +int value
+  +void Function() onDecrease
+  +void Function() onIncrease
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::quantity_selector.dart::QuantitySelector" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::quantity_selector.dart::QuantitySelector"
+
+class "kavkaz_restourant::core::widgets::review_card.dart::ReviewCard" {
+  +ReviewModel review
+  +String? dishTitle
+  +void Function()? onEdit
+  +void Function()? onDelete
+  +bool showActions
+  -String? _formattedPublishedAt
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::review_card.dart::ReviewCard" o-- "kavkaz_restourant::data::models::review_model.dart::ReviewModel"
+"kavkaz_restourant::core::widgets::review_card.dart::ReviewCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::review_card.dart::ReviewCard"
+
+class "kavkaz_restourant::core::widgets::secondary_button.dart::SecondaryButton" {
+  +String text
+  +void Function()? onPressed
+  +IconData? icon
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::secondary_button.dart::SecondaryButton" o-- "dart::ui::void Function()"
+"kavkaz_restourant::core::widgets::secondary_button.dart::SecondaryButton" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::secondary_button.dart::SecondaryButton"
+
+class "kavkaz_restourant::core::widgets::section_title.dart::SectionTitle" {
+  +String title
+  +String? actionText
+  +void Function()? onActionTap
+  +Widget build()
+}
+
+"kavkaz_restourant::core::widgets::section_title.dart::SectionTitle" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::core::widgets::section_title.dart::SectionTitle"
+
+class "kavkaz_restourant::data::models::address_model.dart::AddressModel" {
+  +int id
+  +int userId
+  +String addressText
+  +String? comment
+  +bool isDefault
+  +DateTime? createdAt
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::bonus_operation_model.dart::BonusOperationModel" {
+  +int id
+  +int userId
+  +int bonusOperationTypeId
+  +int bonusAmount
+  +int? orderId
+  +DateTime? createdAt
+  +String? operationTitle
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::booking_model.dart::BookingModel" {
+  +int id
+  +int userId
+  +String? userFullName
+  +String? userPhone
+  +String? userEmail
+  +DateTime bookingDate
+  +String bookingTime
+  +int guestCount
+  +String? comment
+  +int bookingStatusId
+  +String? bookingStatusTitle
+  +DateTime? createdAt
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::booking_status_model.dart::BookingStatusModel" {
+  +int id
+  +String title
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::cart_item_model.dart::CartItemModel" {
+  +int id
+  +int cartId
+  +int dishId
+  +int quantity
+  +String? comment
+  +String? selectedOptions
+  +DishModel? dish
+  +Map<String, dynamic> toJson()
+}
+
+"kavkaz_restourant::data::models::cart_item_model.dart::CartItemModel" o-- "kavkaz_restourant::data::models::dish_model.dart::DishModel"
+
+class "kavkaz_restourant::data::models::category_model.dart::CategoryModel" {
+  +int id
+  +String title
+  +int sortOrder
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::dish_model.dart::DishModel" {
+  +int id
+  +int categoryId
+  +String title
+  +String description
+  +String ingredients
+  +double price
+  +int weight
+  +int? calories
+  +String? allergens
+  +String? photoPath
+  +bool isAvailable
+  +DateTime? createdAt
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::notification_model.dart::NotificationModel" {
+  +int id
+  +int userId
+  +String title
+  +String text
+  +bool isRead
+  +DateTime? createdAt
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::order_item_model.dart::OrderItemModel" {
+  +int id
+  +int orderId
+  +int? dishId
+  +int quantity
+  +double priceAtOrderTime
+  +double itemTotal
+  +String? selectedOptions
+  +String? dishTitle
+  +String? dishPhoto
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::order_model.dart::OrderModel" {
+  +int id
+  +int userId
+  +String? userFullName
+  +String? userPhone
+  +String? userEmail
+  +String? deliveryAddressText
+  +String? deliveryAddressComment
+  +int? addressId
+  +int orderStatusId
+  +int pickupTypeId
+  +int paymentMethodId
+  +DateTime receiveTime
+  +String? comment
+  +double totalAmount
+  +int spentBonus
+  +DateTime? createdAt
+  +String? orderStatusTitle
+  +String? pickupTypeTitle
+  +String? paymentMethodTitle
+  +List<OrderItemModel> items
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::order_status_model.dart::OrderStatusModel" {
+  +int id
+  +String title
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::payment_method_model.dart::PaymentMethodModel" {
+  +int id
+  +String title
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::pickup_type_model.dart::PickupTypeModel" {
+  +int id
+  +String title
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::review_model.dart::ReviewModel" {
+  +int id
+  +int userId
+  +int dishId
+  +int rating
+  +String reviewText
+  +DateTime? publishedAt
+  +String? userName
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::role_model.dart::RoleModel" {
+  +int id
+  +String title
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::models::support_conversation_model.dart::SupportConversationModel" {
+  +int id
+  +int userId
+  +int? assignedStaffId
+  +String status
+  +String? subject
+  +DateTime? lastMessageAt
+  +DateTime? createdAt
+  +DateTime? updatedAt
+  +DateTime? closedAt
+  +String? userName
+  +String? userPhone
+  +String? assignedStaffName
+  +String? lastMessageText
+  +int unreadCount
+  +bool isClosed
+}
+
+class "kavkaz_restourant::data::models::support_message_model.dart::SupportMessageModel" {
+  +int id
+  +int conversationId
+  +int senderUserId
+  +String messageText
+  +DateTime? createdAt
+  +bool isRead
+  +String? senderName
+  +int? senderRoleId
+}
+
+class "kavkaz_restourant::data::models::user_model.dart::UserModel" {
+  +int id
+  +int roleId
+  +String fullName
+  +String phone
+  +String? email
+  +bool isBlocked
+  +int bonusBalance
+  +DateTime? registeredAt
+  +Map<String, dynamic> toJson()
+}
+
+class "kavkaz_restourant::data::repositories::admin_repository.dart::AdminRepository" {
+  -PostgresService _postgresService
+  +dynamic getUsers()
+  +dynamic updateUserRole()
+  +dynamic blockUser()
+  +dynamic deleteUser()
+  +dynamic getAdminDishes()
+  +dynamic createDish()
+  +dynamic updateDish()
+  +dynamic deleteDish()
+  +dynamic getAdminCategories()
+  +dynamic createCategory()
+  +dynamic updateCategory()
+  +dynamic deleteCategory()
+  +dynamic getAdminOrders()
+  +dynamic updateOrderStatus()
+  +dynamic getAdminBookings()
+  +dynamic updateBookingStatus()
+  +dynamic createImport()
+  +dynamic createExport()
+}
+
+"kavkaz_restourant::data::repositories::admin_repository.dart::AdminRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::api_admin_repository.dart::ApiAdminRepository" {
+  -ApiService _apiService
+  +dynamic Future()
+  +dynamic ()
+  +dynamic >()
+  +dynamic getDashboardStats()
+  +dynamic getAdminCategories()
+  +dynamic createCategory()
+  +dynamic updateCategory()
+  +dynamic deleteCategory()
+  +dynamic getAdminDishes()
+  +dynamic deleteDish()
+  +dynamic uploadDishPhoto()
+  +dynamic createDish()
+  +dynamic updateDish()
+  +dynamic getAdminOrders()
+  +dynamic getAdminOrderById()
+  +dynamic updateOrderStatus()
+  +dynamic getAdminBookings()
+  +dynamic updateBookingStatus()
+  +dynamic getUsers()
+  +dynamic getUserOrders()
+  +dynamic getUserBonusHistory()
+  +dynamic updateUserRole()
+  +dynamic blockUser()
+  +dynamic deleteUser()
+  +dynamic adjustUserBonus()
+  +dynamic getReviews()
+  +dynamic createImport()
+  +dynamic createExport()
+  +dynamic getExportTypes()
+}
+
+"kavkaz_restourant::data::repositories::api_admin_repository.dart::ApiAdminRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_auth_repository.dart::ApiAuthRepository" {
+  -ApiService _apiService
+  -SessionService _sessionService
+  +dynamic login()
+  {static} -String? _apiErrorMessage()
+  {static} -String? _loginErrorRu()
+  -dynamic _postLogin()
+  +dynamic requestLoginCode()
+  +dynamic loginWithCode()
+  +dynamic register()
+  +dynamic forgotPassword()
+  +dynamic resetPassword()
+  +dynamic logout()
+  -String _mapRole()
+}
+
+"kavkaz_restourant::data::repositories::api_auth_repository.dart::ApiAuthRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+"kavkaz_restourant::data::repositories::api_auth_repository.dart::ApiAuthRepository" o-- "kavkaz_restourant::core::services::session_service.dart::SessionService"
+
+class "kavkaz_restourant::data::repositories::api_booking_repository.dart::ApiBookingRepository" {
+  -ApiService _apiService
+  +dynamic getBookings()
+  +dynamic createBooking()
+  +dynamic updateBooking()
+  +dynamic cancelBooking()
+}
+
+"kavkaz_restourant::data::repositories::api_booking_repository.dart::ApiBookingRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_cart_repository.dart::ApiCartRepository" {
+  -ApiService _apiService
+  +dynamic getCartItems()
+  +dynamic addToCart()
+  +dynamic updateCartItem()
+  +dynamic removeCartItem()
+  +dynamic clearCart()
+  -String _mapCartError()
+}
+
+"kavkaz_restourant::data::repositories::api_cart_repository.dart::ApiCartRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_menu_repository.dart::ApiMenuRepository" {
+  -ApiService _apiService
+  +dynamic getCategories()
+  +dynamic getDishes()
+  +dynamic getDishById()
+}
+
+"kavkaz_restourant::data::repositories::api_menu_repository.dart::ApiMenuRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_notification_repository.dart::ApiNotificationRepository" {
+  -ApiService _apiService
+  +dynamic getNotifications()
+  +dynamic markAsRead()
+  +dynamic markAllAsRead()
+  +dynamic sendToUser()
+}
+
+"kavkaz_restourant::data::repositories::api_notification_repository.dart::ApiNotificationRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_order_repository.dart::ApiOrderRepository" {
+  -ApiService _apiService
+  +dynamic getOrders()
+  +dynamic getOrderById()
+  +dynamic createOrder()
+  +dynamic cancelOrder()
+  +dynamic repeatOrder()
+  +dynamic updateOrderBeforeConfirmation()
+  -String _mapOrderError()
+}
+
+"kavkaz_restourant::data::repositories::api_order_repository.dart::ApiOrderRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_profile_repository.dart::ApiProfileRepository" {
+  -ApiService _apiService
+  -SessionService _sessionService
+  +dynamic getProfile()
+  +dynamic updateProfile()
+  +dynamic changePassword()
+  +dynamic deleteAccount()
+  +dynamic getAddresses()
+  +dynamic addAddress()
+  +dynamic updateAddress()
+  +dynamic deleteAddress()
+  +dynamic getBonusHistory()
+  +dynamic getBonusBalance()
+}
+
+"kavkaz_restourant::data::repositories::api_profile_repository.dart::ApiProfileRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+"kavkaz_restourant::data::repositories::api_profile_repository.dart::ApiProfileRepository" o-- "kavkaz_restourant::core::services::session_service.dart::SessionService"
+
+class "kavkaz_restourant::data::repositories::api_review_repository.dart::ApiReviewRepository" {
+  -ApiService _apiService
+  +dynamic getDishReviews()
+  +dynamic addReview()
+  +dynamic updateReview()
+  +dynamic deleteReview()
+}
+
+"kavkaz_restourant::data::repositories::api_review_repository.dart::ApiReviewRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::api_support_repository.dart::SupportMessagesPayload" {
+  +SupportConversationModel conversation
+  +List<SupportMessageModel> messages
+}
+
+"kavkaz_restourant::data::repositories::api_support_repository.dart::SupportMessagesPayload" o-- "kavkaz_restourant::data::models::support_conversation_model.dart::SupportConversationModel"
+
+class "kavkaz_restourant::data::repositories::api_support_repository.dart::ApiSupportRepository" {
+  -ApiService _apiService
+  +dynamic getConversations()
+  +dynamic createConversation()
+  +dynamic getMessages()
+  +dynamic postMessage()
+  +dynamic markRead()
+  +dynamic assignToMe()
+  +dynamic closeConversation()
+}
+
+"kavkaz_restourant::data::repositories::api_support_repository.dart::ApiSupportRepository" o-- "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService"
+
+class "kavkaz_restourant::data::repositories::auth_repository.dart::AuthRepository" {
+  -PostgresService _postgresService
+  -SessionService _sessionService
+  +dynamic login()
+  +dynamic register()
+  +dynamic forgotPassword()
+  +dynamic resetPassword()
+  +dynamic getProfile()
+  +dynamic logout()
+  -String _generateResetCode()
+  -String _mapRole()
+}
+
+"kavkaz_restourant::data::repositories::auth_repository.dart::AuthRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+"kavkaz_restourant::data::repositories::auth_repository.dart::AuthRepository" o-- "kavkaz_restourant::core::services::session_service.dart::SessionService"
+
+class "kavkaz_restourant::data::repositories::booking_repository.dart::BookingRepository" {
+  -PostgresService _postgresService
+  +dynamic getBookings()
+  +dynamic createBooking()
+  +dynamic updateBooking()
+  +dynamic cancelBooking()
+}
+
+"kavkaz_restourant::data::repositories::booking_repository.dart::BookingRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::cart_repository.dart::CartRepository" {
+  -PostgresService _postgresService
+  -dynamic _getOrCreateCartId()
+  +dynamic getCartItems()
+  +dynamic addToCart()
+  +dynamic updateCartItem()
+  +dynamic removeCartItem()
+  +dynamic clearCart()
+}
+
+"kavkaz_restourant::data::repositories::cart_repository.dart::CartRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::menu_repository.dart::MenuRepository" {
+  -PostgresService _postgresService
+  +dynamic getCategories()
+  +dynamic getDishes()
+  +dynamic getDishById()
+}
+
+"kavkaz_restourant::data::repositories::menu_repository.dart::MenuRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::notification_repository.dart::NotificationRepository" {
+  -PostgresService _postgresService
+  +dynamic getNotifications()
+  +dynamic markAsRead()
+  +dynamic markAllAsRead()
+}
+
+"kavkaz_restourant::data::repositories::notification_repository.dart::NotificationRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::order_repository.dart::OrderRepository" {
+  -PostgresService _postgresService
+  +dynamic getOrders()
+  +dynamic getOrderById()
+  +dynamic createOrder()
+  +dynamic cancelOrder()
+  +dynamic repeatOrder()
+}
+
+"kavkaz_restourant::data::repositories::order_repository.dart::OrderRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::profile_repository.dart::ProfileRepository" {
+  -PostgresService _postgresService
+  +dynamic getProfile()
+  +dynamic updateProfile()
+  +dynamic changePassword()
+  +dynamic deleteAccount()
+  +dynamic getAddresses()
+  +dynamic addAddress()
+  +dynamic updateAddress()
+  +dynamic deleteAddress()
+  +dynamic getBonusHistory()
+}
+
+"kavkaz_restourant::data::repositories::profile_repository.dart::ProfileRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::repositories::review_repository.dart::ReviewRepository" {
+  -PostgresService _postgresService
+  +dynamic getDishReviews()
+  +dynamic addReview()
+  +dynamic updateReview()
+  +dynamic deleteReview()
+}
+
+"kavkaz_restourant::data::repositories::review_repository.dart::ReviewRepository" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+
+class "kavkaz_restourant::data::sources::remote::api_service.dart::ApiService" {
+  +Dio dio
+  +dynamic get()
+  +dynamic post()
+  +dynamic put()
+  +dynamic delete()
+}
+
+"kavkaz_restourant::data::sources::remote::api_service.dart::ApiService" o-- "dio::src::dio.dart::Dio"
+
+class "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService" {
+  {static} -PostgresService _instance
+  -Connection? _connection
+  +dynamic connection
+  +dynamic close()
+}
+
+"kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService" o-- "kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService"
+"kavkaz_restourant::data::sources::remote::postgres_service.dart::PostgresService" o-- "postgres::postgres.dart::Connection"
+
+class "kavkaz_restourant::features::admin::presentation::admin_bookings_page.dart::AdminBookingsPage" {
+  +State<AdminBookingsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_bookings_page.dart::AdminBookingsPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_bookings_page.dart::_AdminBookingsPageState" {
+  -List<BookingModel> _bookings
+  -bool _isLoading
+  -String? _error
+  -bool _isCanceledBooking()
+  +void initState()
+  -dynamic _loadBookings()
+  -dynamic _changeStatus()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_bookings_page.dart::_AdminBookingsPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_categories_page.dart::AdminCategoriesPage" {
+  +State<AdminCategoriesPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_categories_page.dart::AdminCategoriesPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_categories_page.dart::_AdminCategoriesPageState" {
+  -List<CategoryModel> _categories
+  -bool _isLoading
+  -String? _error
+  -UserRole _role
+  +void initState()
+  -dynamic _loadCategories()
+  -dynamic _deleteCategory()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_categories_page.dart::_AdminCategoriesPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_categories_page.dart::_AdminCategoriesPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::AdminCategoryFormPage" {
+  +CategoryModel? initialCategory
+  +State<AdminCategoryFormPage> createState()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::AdminCategoryFormPage" o-- "kavkaz_restourant::data::models::category_model.dart::CategoryModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::AdminCategoryFormPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::_AdminCategoryFormPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _titleController
+  -TextEditingController _sortOrderController
+  -bool _isSubmitting
+  -bool _isEditMode
+  +void initState()
+  -dynamic _save()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::_AdminCategoryFormPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::_AdminCategoryFormPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_category_form_page.dart::_AdminCategoryFormPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_dashboard_page.dart::AdminDashboardPage" {
+  +State<AdminDashboardPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_dashboard_page.dart::AdminDashboardPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_dashboard_page.dart::_AdminDashboardPageState" {
+  -int _activeOrders
+  -int _bookings
+  -int _users
+  -bool _loading
+  -String? _error
+  -UserRole _role
+  +void initState()
+  -dynamic _loadStats()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_dashboard_page.dart::_AdminDashboardPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_dashboard_page.dart::_AdminDashboardPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_dishes_page.dart::AdminDishesPage" {
+  +State<AdminDishesPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_dishes_page.dart::AdminDishesPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_dishes_page.dart::_AdminDishesPageState" {
+  -List<DishModel> _dishes
+  -bool _isLoading
+  -String? _error
+  -UserRole _role
+  {static} -String _placeholderAsset
+  {static} -double _thumbSize
+  -Widget _dishThumbnail()
+  +void initState()
+  -dynamic _loadDishes()
+  -dynamic _deleteDish()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_dishes_page.dart::_AdminDishesPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_dishes_page.dart::_AdminDishesPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::AdminDishFormPage" {
+  +DishModel? initialDish
+  +State<AdminDishFormPage> createState()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::AdminDishFormPage" o-- "kavkaz_restourant::data::models::dish_model.dart::DishModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::AdminDishFormPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _titleController
+  -TextEditingController _descriptionController
+  -TextEditingController _ingredientsController
+  -TextEditingController _priceController
+  -TextEditingController _weightController
+  -TextEditingController _caloriesController
+  -TextEditingController _allergensController
+  -TextEditingController _photoUrlController
+  -ImagePicker _imagePicker
+  -bool _isAvailable
+  -int? _selectedCategoryId
+  -bool _isSubmitting
+  -bool _isUploadingPhoto
+  -bool _isLoadingCategories
+  -String? _categoriesError
+  -List<CategoryModel> _categories
+  -File? _pickedPhotoFile
+  -FilteringTextInputFormatter _priceInputFormatter
+  -bool _isEditMode
+  +void initState()
+  -dynamic _loadCategories()
+  -dynamic _save()
+  -dynamic _pickPhotoFromPhoneStorage()
+  -Widget _buildPhotoPreview()
+  -Widget _buildPhotoPlaceholder()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState" o-- "image_picker::image_picker.dart::ImagePicker"
+"kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState" o-- "dart::io::File"
+"kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState" o-- "flutter::src::services::text_formatter.dart::FilteringTextInputFormatter"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_dish_form_page.dart::_AdminDishFormPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_export_page.dart::AdminExportPage" {
+  +State<AdminExportPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_export_page.dart::AdminExportPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_export_page.dart::_AdminExportPageState" {
+  {static} -MethodChannel _filesChannel
+  -List<Map<String, dynamic>> _exportTypes
+  -String? _selectedTypeId
+  -bool _loadingExportTypes
+  -bool _refreshingExportTypes
+  -String _format
+  -TextEditingController _periodController
+  -bool _isSubmitting
+  -bool _isDownloading
+  -String? _lastFileName
+  -String? _lastFileUrl
+  -DateTimeRange<DateTime> _dateRange
+  {static} -List<Map<String, dynamic>> _fallbackExportTypes()
+  -String _typeValue()
+  -List<Map<String, dynamic>> _sanitizeExportTypes()
+  -Map<String, dynamic>? _selectedRow()
+  -bool _boolField()
+  +void initState()
+  +void dispose()
+  -dynamic _loadExportTypes()
+  -void _applyJsonOnlyFromSelection()
+  -void _syncPeriodController()
+  -dynamic _pickPeriod()
+  -dynamic _submit()
+  -dynamic _downloadToDevice()
+  -dynamic _resolvePreferredSaveDirectory()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_export_page.dart::_AdminExportPageState" o-- "flutter::src::services::platform_channel.dart::MethodChannel"
+"kavkaz_restourant::features::admin::presentation::admin_export_page.dart::_AdminExportPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::admin::presentation::admin_export_page.dart::_AdminExportPageState" o-- "flutter::src::material::date.dart::DateTimeRange<DateTime>"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_export_page.dart::_AdminExportPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_import_page.dart::AdminImportPage" {
+  +State<AdminImportPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_import_page.dart::AdminImportPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_import_page.dart::_AdminImportPageState" {
+  -String _importType
+  -TextEditingController _fileController
+  -TextEditingController _payloadController
+  -TextEditingController _commentController
+  -dynamic _parsedPayloadRoot
+  -bool _isSubmitting
+  +void dispose()
+  -String _mapImportType()
+  -dynamic _pickAndParseFile()
+  -dynamic _parseJsonPayload()
+  -List<Map<String, dynamic>> _parseCsvPayload()
+  -String _detectCsvDelimiter()
+  -List<String> _splitCsvLine()
+  -dynamic _castCsvValue()
+  -dynamic _submit()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_import_page.dart::_AdminImportPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_import_page.dart::_AdminImportPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_orders_page.dart::AdminOrdersPage" {
+  +State<AdminOrdersPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_orders_page.dart::AdminOrdersPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_orders_page.dart::_AdminOrdersPageState" {
+  -List<OrderModel> _orders
+  -bool _isLoading
+  -String? _error
+  -bool _isCanceledOrder()
+  +void initState()
+  -dynamic _loadOrders()
+  -dynamic _changeStatus()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_orders_page.dart::_AdminOrdersPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_order_details_page.dart::AdminOrderDetailsPage" {
+  +int orderId
+  +OrderModel? initialOrder
+  +State<AdminOrderDetailsPage> createState()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_order_details_page.dart::AdminOrderDetailsPage" o-- "kavkaz_restourant::data::models::order_model.dart::OrderModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_order_details_page.dart::AdminOrderDetailsPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_order_details_page.dart::_AdminOrderDetailsPageState" {
+  {static} -List<DropdownMenuItem<int>> _statusItems
+  -OrderModel? _order
+  -int _selectedStatusId
+  -bool _isLoading
+  -bool _isSaving
+  -String? _error
+  -bool _isCanceledOrder
+  +void initState()
+  -dynamic _loadOrder()
+  -dynamic _saveStatus()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_order_details_page.dart::_AdminOrderDetailsPageState" o-- "kavkaz_restourant::data::models::order_model.dart::OrderModel"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_order_details_page.dart::_AdminOrderDetailsPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_users_page.dart::AdminUsersPage" {
+  +State<AdminUsersPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_users_page.dart::AdminUsersPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_users_page.dart::_AdminUsersPageState" {
+  -List<UserModel> _users
+  -bool _isLoading
+  -bool _actionLoading
+  -String? _error
+  -UserRole _role
+  -int? _currentUserId
+  +void initState()
+  -dynamic _loadUsers()
+  -String _roleTitle()
+  -dynamic _changeRole()
+  -dynamic _deleteUser()
+  -dynamic _toggleBlock()
+  -dynamic _adjustBonus()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_users_page.dart::_AdminUsersPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_users_page.dart::_AdminUsersPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_user_bonus_history_page.dart::AdminUserBonusHistoryPage" {
+  +UserModel user
+  +State<AdminUserBonusHistoryPage> createState()
+}
+
+"kavkaz_restourant::features::admin::presentation::admin_user_bonus_history_page.dart::AdminUserBonusHistoryPage" o-- "kavkaz_restourant::data::models::user_model.dart::UserModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_user_bonus_history_page.dart::AdminUserBonusHistoryPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_user_bonus_history_page.dart::_AdminUserBonusHistoryPageState" {
+  -List<BonusOperationModel> _operations
+  -bool _isLoading
+  -String? _error
+  +void initState()
+  -dynamic _loadHistory()
+  -String _formatDate()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_user_bonus_history_page.dart::_AdminUserBonusHistoryPageState"
+
+class "kavkaz_restourant::features::admin::presentation::admin_user_details_page.dart::AdminUserDetailsPage" {
+  +State<AdminUserDetailsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::admin::presentation::admin_user_details_page.dart::AdminUserDetailsPage"
+
+class "kavkaz_restourant::features::admin::presentation::admin_user_details_page.dart::_AdminUserDetailsPageState" {
+  -int _roleId
+  -bool _isBlocked
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::admin::presentation::admin_user_details_page.dart::_AdminUserDetailsPageState"
+
+class "kavkaz_restourant::features::auth::presentation::auth_required_page.dart::AuthRequiredPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::auth::presentation::auth_required_page.dart::AuthRequiredPage"
+
+class "kavkaz_restourant::features::auth::presentation::forgot_password_page.dart::ForgotPasswordPage" {
+  +State<ForgotPasswordPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::auth::presentation::forgot_password_page.dart::ForgotPasswordPage"
+
+class "kavkaz_restourant::features::auth::presentation::forgot_password_page.dart::_ForgotPasswordPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _emailController
+  -bool _loading
+  +void dispose()
+  -dynamic _sendCode()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::auth::presentation::forgot_password_page.dart::_ForgotPasswordPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::auth::presentation::forgot_password_page.dart::_ForgotPasswordPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::auth::presentation::forgot_password_page.dart::_ForgotPasswordPageState"
+
+class "kavkaz_restourant::features::auth::presentation::login_page.dart::LoginPage" {
+  +State<LoginPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::auth::presentation::login_page.dart::LoginPage"
+
+class "kavkaz_restourant::features::auth::presentation::login_page.dart::_LoginPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _loginController
+  -TextEditingController _passwordController
+  -TextEditingController _codeController
+  -bool _loading
+  -bool _codeMode
+  -bool _requestingCode
+  -bool _obscurePassword
+  -bool _rememberMe
+  +void initState()
+  +void dispose()
+  -dynamic _restoreRememberMeState()
+  -dynamic _sendLoginCode()
+  -dynamic _login()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::auth::presentation::login_page.dart::_LoginPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::auth::presentation::login_page.dart::_LoginPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::auth::presentation::login_page.dart::_LoginPageState"
+
+class "kavkaz_restourant::features::auth::presentation::login_page.dart::_AuthInput" {
+  +TextEditingController controller
+  +String hintText
+  +IconData icon
+  +bool obscureText
+  +String? Function(String?)? validator
+  +Widget? suffix
+  +int? maxLength
+  +Widget build()
+}
+
+"kavkaz_restourant::features::auth::presentation::login_page.dart::_AuthInput" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::auth::presentation::login_page.dart::_AuthInput" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"kavkaz_restourant::features::auth::presentation::login_page.dart::_AuthInput" o-- "null::String Function(String)"
+"kavkaz_restourant::features::auth::presentation::login_page.dart::_AuthInput" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::auth::presentation::login_page.dart::_AuthInput"
+
+class "kavkaz_restourant::features::auth::presentation::register_page.dart::RegisterPage" {
+  +State<RegisterPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::auth::presentation::register_page.dart::RegisterPage"
+
+class "kavkaz_restourant::features::auth::presentation::register_page.dart::_RegisterPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _nameController
+  -TextEditingController _phoneController
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  -TextEditingController _confirmPasswordController
+  -bool _loading
+  -bool _obscurePassword
+  -bool _obscureConfirmPassword
+  -dynamic _register()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_RegisterPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_RegisterPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::auth::presentation::register_page.dart::_RegisterPageState"
+
+class "kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput" {
+  +TextEditingController controller
+  +String hintText
+  +IconData icon
+  +bool obscureText
+  +String? Function(String?)? validator
+  +Widget? suffix
+  +TextInputType? keyboardType
+  +bool autocorrect
+  +Widget build()
+}
+
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput" o-- "null::String Function(String)"
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput" o-- "flutter::src::widgets::framework.dart::Widget"
+"kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput" o-- "flutter::src::services::text_input.dart::TextInputType"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::auth::presentation::register_page.dart::_AuthInput"
+
+class "kavkaz_restourant::features::auth::presentation::set_password_page.dart::SetPasswordPage" {
+  +State<SetPasswordPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::auth::presentation::set_password_page.dart::SetPasswordPage"
+
+class "kavkaz_restourant::features::auth::presentation::set_password_page.dart::_SetPasswordPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _codeController
+  -TextEditingController _passwordController
+  -TextEditingController _confirmPasswordController
+  -bool _loading
+  -bool _obscurePassword
+  -bool _obscureConfirmPassword
+  -dynamic _resetPassword()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::auth::presentation::set_password_page.dart::_SetPasswordPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::auth::presentation::set_password_page.dart::_SetPasswordPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::auth::presentation::set_password_page.dart::_SetPasswordPageState"
+
+class "kavkaz_restourant::features::booking::presentation::booking_page.dart::BookingPage" {
+  +State<BookingPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::booking::presentation::booking_page.dart::BookingPage"
+
+class "kavkaz_restourant::features::booking::presentation::booking_page.dart::_BookingPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _dateController
+  -TextEditingController _timeController
+  -TextEditingController _guestCountController
+  -TextEditingController _commentController
+  -List<BookingModel> _bookings
+  -bool _isLoading
+  -bool _submitting
+  -String? _error
+  -bool _isAuthorized
+  -bool _isStaff
+  +void initState()
+  +void dispose()
+  -dynamic _loadBookings()
+  -dynamic _initPage()
+  -dynamic _pickDate()
+  -dynamic _pickTime()
+  -dynamic _createBooking()
+  -dynamic _cancelBooking()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::booking::presentation::booking_page.dart::_BookingPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::booking::presentation::booking_page.dart::_BookingPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::booking::presentation::booking_page.dart::_BookingPageState"
+
+class "kavkaz_restourant::features::cart::presentation::cart_page.dart::CartPage" {
+  +State<CartPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::cart::presentation::cart_page.dart::CartPage"
+
+class "kavkaz_restourant::features::cart::presentation::cart_page.dart::_CartPageState" {
+  -List<CartItemModel> _items
+  -bool _isLoading
+  -String? _error
+  -bool _actionLoading
+  -bool _isStaff
+  -double _subtotal
+  +void initState()
+  -dynamic _loadCart()
+  -dynamic _increase()
+  -dynamic _decrease()
+  -dynamic _remove()
+  -dynamic _clearCart()
+  -dynamic _hasActiveOrder()
+  -Widget _buildDishImage()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::cart::presentation::cart_page.dart::_CartPageState"
+
+class "kavkaz_restourant::features::cart::presentation::checkout_page.dart::CheckoutPage" {
+  +State<CheckoutPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::cart::presentation::checkout_page.dart::CheckoutPage"
+
+class "kavkaz_restourant::features::cart::presentation::checkout_page.dart::_CheckoutPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _receiveTimeController
+  -TextEditingController _commentController
+  -TextEditingController _bonusController
+  -List<AddressModel> _addresses
+  -List<CartItemModel> _cartItems
+  -bool _isLoading
+  -bool _submitting
+  -String? _error
+  -bool _isStaff
+  -int _selectedPickupTypeId
+  -int _selectedPaymentMethodId
+  -int? _selectedAddressId
+  -int _availableBonus
+  -DateTime? _selectedReceiveDateTime
+  {static} -double _deliveryFeeRub
+  {static} -List<_PickupTypeItem> _pickupTypes
+  {static} -List<_PaymentMethodItem> _paymentMethods
+  -double _itemsSubtotal
+  -double _deliveryCost
+  -int _spentBonus
+  -double _totalAmount
+  +void initState()
+  -dynamic _loadCheckoutData()
+  -dynamic _hasActiveOrder()
+  -dynamic _openAddAddressSheet()
+  -List<DateTime> _buildReceiveSlotDateTimes()
+  -String _receiveSlotLabel()
+  -dynamic _pickReceiveTime()
+  -dynamic _submitOrder()
+  -dynamic _tryRecoverRecentlyCreatedOrder()
+  -Widget _buildPickupSelector()
+  -Widget _buildPaymentSelector()
+  -Widget _buildOrderItemsSection()
+  -Widget _buildAddressSection()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::cart::presentation::checkout_page.dart::_CheckoutPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::cart::presentation::checkout_page.dart::_CheckoutPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::cart::presentation::checkout_page.dart::_CheckoutPageState"
+
+class "kavkaz_restourant::features::cart::presentation::checkout_page.dart::_PickupTypeItem" {
+  +int id
+  +String title
+}
+
+class "kavkaz_restourant::features::cart::presentation::checkout_page.dart::_PaymentMethodItem" {
+  +int id
+  +String title
+}
+
+class "kavkaz_restourant::features::home::presentation::home_page.dart::HomePage" {
+  +void Function()? onOpenMenu
+  +State<HomePage> createState()
+}
+
+"kavkaz_restourant::features::home::presentation::home_page.dart::HomePage" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::home::presentation::home_page.dart::HomePage"
+
+class "kavkaz_restourant::features::home::presentation::home_page.dart::_HomePageState" {
+  -List<CategoryModel> _categories
+  -List<DishModel> _popularDishes
+  -bool _isLoading
+  -String? _error
+  -int? _selectedCategoryId
+  -List<DishModel> _filteredDishes
+  +void initState()
+  -dynamic _loadHomeData()
+  -dynamic _requireAuth()
+  -void _openMenu()
+  -dynamic _ensureCustomerRole()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::home::presentation::home_page.dart::_HomePageState"
+
+class "kavkaz_restourant::features::home::presentation::home_page.dart::_HomeHeader" {
+  +void Function() onNotificationsTap
+  +Widget build()
+}
+
+"kavkaz_restourant::features::home::presentation::home_page.dart::_HomeHeader" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::home::presentation::home_page.dart::_HomeHeader"
+
+class "kavkaz_restourant::features::home::presentation::home_page.dart::_HomePromoCard" {
+  +void Function() onMenuTap
+  +Widget build()
+}
+
+"kavkaz_restourant::features::home::presentation::home_page.dart::_HomePromoCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::home::presentation::home_page.dart::_HomePromoCard"
+
+class "kavkaz_restourant::features::home::presentation::home_page.dart::_QuickActionsRow" {
+  +void Function() onDeliveryTap
+  +void Function() onBookingTap
+  +void Function() onCartTap
+  +Widget build()
+}
+
+"kavkaz_restourant::features::home::presentation::home_page.dart::_QuickActionsRow" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::home::presentation::home_page.dart::_QuickActionsRow"
+
+class "kavkaz_restourant::features::home::presentation::home_page.dart::_ActionTile" {
+  +IconData icon
+  +String title
+  +String subtitle
+  +void Function() onTap
+  +Widget build()
+}
+
+"kavkaz_restourant::features::home::presentation::home_page.dart::_ActionTile" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"kavkaz_restourant::features::home::presentation::home_page.dart::_ActionTile" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::home::presentation::home_page.dart::_ActionTile"
+
+class "kavkaz_restourant::features::menu::presentation::dish_details_page.dart::DishDetailsPage" {
+  +DishModel dish
+  +State<DishDetailsPage> createState()
+}
+
+"kavkaz_restourant::features::menu::presentation::dish_details_page.dart::DishDetailsPage" o-- "kavkaz_restourant::data::models::dish_model.dart::DishModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::menu::presentation::dish_details_page.dart::DishDetailsPage"
+
+class "kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_DishDetailsPageState" {
+  -DishModel? _dish
+  -bool _isLoading
+  -bool _adding
+  -String? _error
+  -int _quantity
+  -TextEditingController _optionsController
+  -TextEditingController _commentController
+  -double _total
+  +void initState()
+  +void dispose()
+  -dynamic _loadDish()
+  -Widget _buildDishImage()
+  -Widget _buildImagePlaceholder()
+  -dynamic _addToCart()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_DishDetailsPageState" o-- "kavkaz_restourant::data::models::dish_model.dart::DishModel"
+"kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_DishDetailsPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_DishDetailsPageState"
+
+class "kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_InfoChip" {
+  +IconData icon
+  +String label
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_InfoChip" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::menu::presentation::dish_details_page.dart::_InfoChip"
+
+class "kavkaz_restourant::features::menu::presentation::menu_page.dart::MenuPage" {
+  +State<MenuPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::menu::presentation::menu_page.dart::MenuPage"
+
+class "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuPageState" {
+  -TextEditingController _searchController
+  -List<CategoryModel> _categories
+  -List<DishModel> _dishes
+  -bool _isLoading
+  -String? _error
+  -int? _selectedCategoryId
+  -String? _sortKey
+  -bool _onlyAvailable
+  -bool _lightCaloriesOnly
+  -RangeValues _priceRange
+  -double _priceLimitMin
+  -double _priceLimitMax
+  -Timer? _searchDebounce
+  -bool _priceLimitsSeeded
+  -List<DishModel> _visibleDishes
+  -bool _hasActiveLocalFilters
+  +void initState()
+  +void dispose()
+  -void _onSearchChanged()
+  -void _syncPriceLimitsAfterLoad()
+  -dynamic _loadInitialData()
+  -dynamic _loadDishes()
+  -dynamic _reload()
+  -void _resetLocalFilters()
+  -dynamic _openFiltersSheet()
+  -dynamic _requireAuth()
+  -dynamic _canAddToCart()
+  -dynamic _pickSort()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuPageState" o-- "flutter::src::material::range_slider_parts.dart::RangeValues"
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuPageState" o-- "dart::async::Timer"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuPageState"
+
+class "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSearchCard" {
+  +TextEditingController controller
+  +void Function() onClear
+  +void Function() onFiltersTap
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSearchCard" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSearchCard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSearchCard"
+
+class "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSortStrip" {
+  +String? sortKey
+  +bool lightOnly
+  +dynamic Function(String?) onSort
+  +void Function() onLightToggle
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSortStrip" o-- "null::dynamic Function(String)"
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSortStrip" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuSortStrip"
+
+class "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuActiveFiltersBanner" {
+  +String priceLabel
+  +bool lightOnly
+  +void Function() onReset
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuActiveFiltersBanner" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::menu::presentation::menu_page.dart::_MenuActiveFiltersBanner"
+
+class "kavkaz_restourant::features::menu::presentation::reviews_page.dart::ReviewsPage" {
+  +int dishId
+  +State<ReviewsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::menu::presentation::reviews_page.dart::ReviewsPage"
+
+class "kavkaz_restourant::features::menu::presentation::reviews_page.dart::_ReviewsPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _reviewController
+  -int _rating
+  -List<ReviewModel> _reviews
+  -bool _isLoading
+  -bool _submitting
+  -String? _error
+  +void initState()
+  +void dispose()
+  -dynamic _loadReviews()
+  -dynamic _addReview()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::menu::presentation::reviews_page.dart::_ReviewsPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::menu::presentation::reviews_page.dart::_ReviewsPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::menu::presentation::reviews_page.dart::_ReviewsPageState"
+
+class "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::OnboardingPage" {
+  +State<OnboardingPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::OnboardingPage"
+
+class "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingPageState" {
+  -PageController _controller
+  -int _currentIndex
+  {static} -List<_OnboardingItem> _items
+  -void _next()
+  -double _scrollPage()
+  -Widget _buildHeroImage()
+  +void dispose()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingPageState" o-- "flutter::src::widgets::page_view.dart::PageController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingPageState"
+
+class "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingItem" {
+  +String title
+  +String accentWord
+  +String subtitle
+  +String imagePath
+  +IconData fallbackIcon
+}
+
+"kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingItem" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingTitle" {
+  +String title
+  +String accentWord
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingTitle"
+
+class "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingImageFallback" {
+  +IconData icon
+  +Widget build()
+}
+
+"kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingImageFallback" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::onboarding::presentation::onboarding_page.dart::_OnboardingImageFallback"
+
+class "kavkaz_restourant::features::orders::presentation::orders_history_page.dart::OrdersHistoryPage" {
+  +State<OrdersHistoryPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::orders::presentation::orders_history_page.dart::OrdersHistoryPage"
+
+class "kavkaz_restourant::features::orders::presentation::orders_history_page.dart::_OrdersHistoryPageState" {
+  -List<OrderModel> _orders
+  -bool _isLoading
+  -String? _error
+  -bool _actionLoading
+  -bool _isEditable()
+  -bool _isCancelable()
+  +void initState()
+  -dynamic _loadOrders()
+  -dynamic _repeatOrder()
+  -dynamic _cancelOrder()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::orders::presentation::orders_history_page.dart::_OrdersHistoryPageState"
+
+class "kavkaz_restourant::features::orders::presentation::order_details_page.dart::OrderDetailsPage" {
+  +OrderModel order
+  +State<OrderDetailsPage> createState()
+}
+
+"kavkaz_restourant::features::orders::presentation::order_details_page.dart::OrderDetailsPage" o-- "kavkaz_restourant::data::models::order_model.dart::OrderModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::orders::presentation::order_details_page.dart::OrderDetailsPage"
+
+class "kavkaz_restourant::features::orders::presentation::order_details_page.dart::_OrderDetailsPageState" {
+  -OrderModel? _order
+  -bool _isLoading
+  -bool _actionLoading
+  -String? _error
+  -List<AddressModel> _addresses
+  -int _availableBonus
+  -bool _canEditOrder
+  -bool _canCancelOrder
+  +void initState()
+  -dynamic _loadOrder()
+  -String _formatDateTime()
+  -String _orderItemTitle()
+  -dynamic _repeatOrder()
+  -dynamic _cancelOrder()
+  -DateTime _mergeDateAndTime()
+  -dynamic _editOrder()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::orders::presentation::order_details_page.dart::_OrderDetailsPageState" o-- "kavkaz_restourant::data::models::order_model.dart::OrderModel"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::orders::presentation::order_details_page.dart::_OrderDetailsPageState"
+
+class "kavkaz_restourant::features::orders::presentation::order_tracking_page.dart::OrderTrackingPage" {
+  +int orderId
+  +String status
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::orders::presentation::order_tracking_page.dart::OrderTrackingPage"
+
+class "kavkaz_restourant::features::profile::presentation::addresses_page.dart::AddressesPage" {
+  +State<AddressesPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::addresses_page.dart::AddressesPage"
+
+class "kavkaz_restourant::features::profile::presentation::addresses_page.dart::_AddressesPageState" {
+  -List<AddressModel> _addresses
+  -bool _isLoading
+  -bool _actionLoading
+  -String? _error
+  -bool _isStaff
+  +void initState()
+  -dynamic _loadAddresses()
+  -dynamic _showAddressSheet()
+  -dynamic _deleteAddress()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::addresses_page.dart::_AddressesPageState"
+
+class "kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::AddressFormSheet" {
+  +AddressModel? existing
+  +State<AddressFormSheet> createState()
+}
+
+"kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::AddressFormSheet" o-- "kavkaz_restourant::data::models::address_model.dart::AddressModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::AddressFormSheet"
+
+class "kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::_AddressFormSheetState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _addressController
+  -TextEditingController _commentController
+  -bool _isDefault
+  -double? _pickedLat
+  -double? _pickedLng
+  -bool _submitting
+  +void initState()
+  +void dispose()
+  -dynamic _openMap()
+  -dynamic _save()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::_AddressFormSheetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::_AddressFormSheetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::address_form_sheet.dart::_AddressFormSheetState"
+
+class "kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::AddressMapPickerResult" {
+  +double latitude
+  +double longitude
+  +String? suggestedAddress
+}
+
+class "kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::AddressMapPickerPage" {
+  +double? initialLatitude
+  +double? initialLongitude
+  +State<AddressMapPickerPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::AddressMapPickerPage"
+
+class "kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::_AddressMapPickerPageState" {
+  {static} -LatLng _defaultCenter
+  -MapController _mapController
+  -LatLng _marker
+  -String? _resolvedAddress
+  -bool _resolving
+  -Timer? _geocodeDebounce
+  +void initState()
+  +void dispose()
+  -void _scheduleReverseGeocode()
+  -dynamic _useMyLocation()
+  -void _confirm()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::_AddressMapPickerPageState" o-- "latlong2::latlong.dart::LatLng"
+"kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::_AddressMapPickerPageState" o-- "flutter_map::src::map::controller::map_controller.dart::MapController"
+"kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::_AddressMapPickerPageState" o-- "dart::async::Timer"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::address_map_picker_page.dart::_AddressMapPickerPageState"
+
+class "kavkaz_restourant::features::profile::presentation::bonuses_page.dart::BonusesPage" {
+  +State<BonusesPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::bonuses_page.dart::BonusesPage"
+
+class "kavkaz_restourant::features::profile::presentation::bonuses_page.dart::_BonusesPageState" {
+  -List<BonusOperationModel> _operations
+  -int _balance
+  -bool _isLoading
+  -String? _error
+  +void initState()
+  -dynamic _loadBonuses()
+  -String _formatDate()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::bonuses_page.dart::_BonusesPageState"
+
+class "kavkaz_restourant::features::profile::presentation::change_password_page.dart::ChangePasswordPage" {
+  +State<ChangePasswordPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::change_password_page.dart::ChangePasswordPage"
+
+class "kavkaz_restourant::features::profile::presentation::change_password_page.dart::_ChangePasswordPageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _currentPasswordController
+  -TextEditingController _newPasswordController
+  -TextEditingController _confirmPasswordController
+  -bool _loading
+  -dynamic _changePassword()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::profile::presentation::change_password_page.dart::_ChangePasswordPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::profile::presentation::change_password_page.dart::_ChangePasswordPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::change_password_page.dart::_ChangePasswordPageState"
+
+class "kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::EditProfilePage" {
+  +UserModel? initialUser
+  +State<EditProfilePage> createState()
+}
+
+"kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::EditProfilePage" o-- "kavkaz_restourant::data::models::user_model.dart::UserModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::EditProfilePage"
+
+class "kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::_EditProfilePageState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _nameController
+  -TextEditingController _phoneController
+  -TextEditingController _emailController
+  -TextEditingController _confirmPasswordController
+  -bool _isInitialLoading
+  -bool _isLoading
+  -String _initialPhone
+  +void initState()
+  +void dispose()
+  -dynamic _loadInitialProfile()
+  -dynamic _saveProfile()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::_EditProfilePageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::_EditProfilePageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::edit_profile_page.dart::_EditProfilePageState"
+
+class "kavkaz_restourant::features::profile::presentation::my_reviews_page.dart::MyReviewsPage" {
+  +State<MyReviewsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::my_reviews_page.dart::MyReviewsPage"
+
+class "kavkaz_restourant::features::profile::presentation::my_reviews_page.dart::_MyReviewsPageState" {
+  -List<dynamic> _entries
+  -bool _isLoading
+  -String? _error
+  -bool _actionLoading
+  +dynamic List()
+  +dynamic ()
+  +dynamic >()
+  +void initState()
+  -dynamic _loadMyReviews()
+  -dynamic _deleteReview()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::my_reviews_page.dart::_MyReviewsPageState"
+
+class "kavkaz_restourant::features::profile::presentation::notifications_page.dart::NotificationsPage" {
+  +State<NotificationsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::notifications_page.dart::NotificationsPage"
+
+class "kavkaz_restourant::features::profile::presentation::notifications_page.dart::_NotificationsPageState" {
+  -List<NotificationModel> _notifications
+  -bool _isLoading
+  -bool _actionLoading
+  -String? _error
+  -int _unreadCount
+  +void initState()
+  -dynamic _loadNotifications()
+  -dynamic _markAsRead()
+  -dynamic _markAllAsRead()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::notifications_page.dart::_NotificationsPageState"
+
+class "kavkaz_restourant::features::profile::presentation::profile_page.dart::ProfilePage" {
+  +State<ProfilePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::profile::presentation::profile_page.dart::ProfilePage"
+
+class "kavkaz_restourant::features::profile::presentation::profile_page.dart::_ProfilePageState" {
+  -UserModel? _user
+  -UserRole _role
+  -bool _isLoading
+  -String? _error
+  -int _bonusBalance
+  -List<AddressModel> _addresses
+  +void initState()
+  -dynamic _loadProfile()
+  -UserRole _mapRole()
+  -String _roleLabel()
+  -dynamic _logout()
+  -dynamic _deleteAccount()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::profile::presentation::profile_page.dart::_ProfilePageState" o-- "kavkaz_restourant::data::models::user_model.dart::UserModel"
+"kavkaz_restourant::features::profile::presentation::profile_page.dart::_ProfilePageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::profile::presentation::profile_page.dart::_ProfilePageState"
+
+class "kavkaz_restourant::features::shell::presentation::main_shell_page.dart::MainShellPage" {
+  +State<MainShellPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::shell::presentation::main_shell_page.dart::MainShellPage"
+
+class "kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_MainShellPageState" {
+  -int _currentIndex
+  -int _cartRefreshKey
+  -UserRole _role
+  -Set<int> _initializedTabs
+  -String _shellDisplayName
+  -String _shellFullName
+  -int? _customerBonusBalance
+  -bool _bonusLoading
+  -bool _bonusLoadFailed
+  +void initState()
+  -dynamic _bootstrapShell()
+  -dynamic _loadShellBonuses()
+  -String _formatBonusAmount()
+  +dynamic ()
+  -dynamic _headerBonusLine()
+  -dynamic _loadRoleAndAuthState()
+  -dynamic _loadShellUserProfile()
+  {static} -String _initials()
+  -dynamic _openProfileFromHeader()
+  -dynamic _canOpenTab()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_MainShellPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_MainShellPageState"
+
+class "kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_ShellHeader" {
+  +String displayName
+  +String subtitleText
+  +IconData subtitleIcon
+  +Color subtitleIconColor
+  +String? initials
+  +bool isGuest
+  +void Function() onProfileTap
+  +void Function() onNotificationsTap
+  +Widget build()
+}
+
+"kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_ShellHeader" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_ShellHeader" o-- "dart::ui::Color"
+"kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_ShellHeader" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "kavkaz_restourant::features::shell::presentation::main_shell_page.dart::_ShellHeader"
+
+class "kavkaz_restourant::features::splash::presentation::splash_page.dart::SplashPage" {
+  +State<SplashPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::splash::presentation::splash_page.dart::SplashPage"
+
+class "kavkaz_restourant::features::splash::presentation::splash_page.dart::_SplashPageState" {
+  -AnimationController _entranceController
+  -Animation<double> _imageOpacity
+  -Animation<double> _imageScale
+  -Animation<double> _contentOpacity
+  +void initState()
+  +void dispose()
+  -dynamic _navigateFromSplash()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::splash::presentation::splash_page.dart::_SplashPageState" o-- "flutter::src::animation::animation_controller.dart::AnimationController"
+"kavkaz_restourant::features::splash::presentation::splash_page.dart::_SplashPageState" o-- "flutter::src::animation::animation.dart::Animation<double>"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::splash::presentation::splash_page.dart::_SplashPageState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin" <|-- "kavkaz_restourant::features::splash::presentation::splash_page.dart::_SplashPageState"
+
+class "kavkaz_restourant::features::support::presentation::support_chat_page.dart::SupportChatPage" {
+  +int conversationId
+  +State<SupportChatPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::support::presentation::support_chat_page.dart::SupportChatPage"
+
+class "kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState" {
+  -TextEditingController _controller
+  -ScrollController _scrollController
+  -Timer? _pollTimer
+  -SupportConversationModel? _conversation
+  -List<SupportMessageModel> _messages
+  -bool _isLoading
+  -bool _isSending
+  -bool _isActionLoading
+  -String? _error
+  -int? _myUserId
+  -UserRole _myRole
+  -bool _isStaff
+  -bool _isClosed
+  +void initState()
+  +void dispose()
+  -void _startPolling()
+  -bool _isNearBottom()
+  -String _formatMessageTime()
+  -dynamic _load()
+  -dynamic _refreshSilently()
+  -void _scrollToBottom()
+  -dynamic _send()
+  -dynamic _assignToMe()
+  -dynamic _closeConversation()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState" o-- "dart::async::Timer"
+"kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState" o-- "kavkaz_restourant::data::models::support_conversation_model.dart::SupportConversationModel"
+"kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::support::presentation::support_chat_page.dart::_SupportChatPageState"
+
+class "kavkaz_restourant::features::support::presentation::support_conversations_page.dart::SupportConversationsPage" {
+  +State<SupportConversationsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "kavkaz_restourant::features::support::presentation::support_conversations_page.dart::SupportConversationsPage"
+
+class "kavkaz_restourant::features::support::presentation::support_conversations_page.dart::_SupportConversationsPageState" {
+  -List<SupportConversationModel> _conversations
+  -bool _isLoading
+  -String? _error
+  -UserRole _role
+  -bool _isStaff
+  +void initState()
+  -dynamic _load()
+  -dynamic _createConversation()
+  +Widget build()
+}
+
+"kavkaz_restourant::features::support::presentation::support_conversations_page.dart::_SupportConversationsPageState" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"flutter::src::widgets::framework.dart::State" <|-- "kavkaz_restourant::features::support::presentation::support_conversations_page.dart::_SupportConversationsPageState"
+
+class "kavkaz_restourant::shared::enums::booking_status.dart::BookingStatus" {
+  +int index
+  {static} +List<BookingStatus> values
+  {static} +BookingStatus newBooking
+  {static} +BookingStatus confirmed
+  {static} +BookingStatus cancelled
+  {static} +BookingStatus completed
+}
+
+"kavkaz_restourant::shared::enums::booking_status.dart::BookingStatus" o-- "kavkaz_restourant::shared::enums::booking_status.dart::BookingStatus"
+"dart::core::Enum" <|-- "kavkaz_restourant::shared::enums::booking_status.dart::BookingStatus"
+
+class "kavkaz_restourant::shared::enums::order_status.dart::OrderStatus" {
+  +int index
+  {static} +List<OrderStatus> values
+  {static} +OrderStatus newOrder
+  {static} +OrderStatus confirmed
+  {static} +OrderStatus cooking
+  {static} +OrderStatus ready
+  {static} +OrderStatus delivering
+  {static} +OrderStatus completed
+  {static} +OrderStatus cancelled
+}
+
+"kavkaz_restourant::shared::enums::order_status.dart::OrderStatus" o-- "kavkaz_restourant::shared::enums::order_status.dart::OrderStatus"
+"dart::core::Enum" <|-- "kavkaz_restourant::shared::enums::order_status.dart::OrderStatus"
+
+class "kavkaz_restourant::shared::enums::payment_method.dart::PaymentMethod" {
+  +int index
+  {static} +List<PaymentMethod> values
+  {static} +PaymentMethod cash
+  {static} +PaymentMethod card
+  {static} +PaymentMethod online
+}
+
+"kavkaz_restourant::shared::enums::payment_method.dart::PaymentMethod" o-- "kavkaz_restourant::shared::enums::payment_method.dart::PaymentMethod"
+"dart::core::Enum" <|-- "kavkaz_restourant::shared::enums::payment_method.dart::PaymentMethod"
+
+class "kavkaz_restourant::shared::enums::pickup_type.dart::PickupType" {
+  +int index
+  {static} +List<PickupType> values
+  {static} +PickupType delivery
+  {static} +PickupType pickup
+}
+
+"kavkaz_restourant::shared::enums::pickup_type.dart::PickupType" o-- "kavkaz_restourant::shared::enums::pickup_type.dart::PickupType"
+"dart::core::Enum" <|-- "kavkaz_restourant::shared::enums::pickup_type.dart::PickupType"
+
+class "kavkaz_restourant::shared::enums::user_role.dart::UserRole" {
+  +int index
+  {static} +List<UserRole> values
+  {static} +UserRole guest
+  {static} +UserRole user
+  {static} +UserRole manager
+  {static} +UserRole admin
+}
+
+"kavkaz_restourant::shared::enums::user_role.dart::UserRole" o-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+"dart::core::Enum" <|-- "kavkaz_restourant::shared::enums::user_role.dart::UserRole"
+
+
+@enduml
